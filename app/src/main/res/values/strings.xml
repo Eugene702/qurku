@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">QurKu</string>
+    <string name="_114">114</string>
+    <string name="al_fatihah">Al-Fatihah</string>
+    <string name="pembukaan">(Pembukaan)</string>
+    <string name="_7_ayat">7 Ayat</string>
+    <string name="mekah">Mekah</string>
+    <string name="cari_surah_al_quran">Cari surah Al-Quran</string>
+    <string name="sedang_memuat">Sedang memuat...</string>
+    <string name="ayat">Ayat</string>
+    <string name="al_fatihah_arabic">الفاتحة</string>
+    <string name="no_connection">Tidak ada koneksi internet!</string>
+    <string name="no_connection_message">Silahkan periksa kembali koneksi jaringan internet anda!</string>
+</resources>
