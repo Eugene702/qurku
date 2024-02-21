@@ -61,6 +61,7 @@ class DetailSurahActivity : AppCompatActivity() {
             if(surahNumber > -1){
                 repository = SurahDetailRepository()
                 val factory = SurahDetailViewModelFactory(repository)
+
                 viewModel = ViewModelProvider(this@DetailSurahActivity, factory)[SurahDetailViewModel::class.java]
                 viewModel.getData(surahNumber)
 
@@ -91,6 +92,10 @@ class DetailSurahActivity : AppCompatActivity() {
                 finish()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onPostResume() {

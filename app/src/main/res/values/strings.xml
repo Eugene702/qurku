@@ -11,4 +11,8 @@
     <string name="al_fatihah_arabic">الفاتحة</string>
     <string name="no_connection">Tidak ada koneksi internet!</string>
     <string name="no_connection_message">Silahkan periksa kembali koneksi jaringan internet anda!</string>
+
+    <!--  AdMob  -->
+    <string name="admob_id">ca-app-pub-6109292819672436~8511303386</string>
+    <string name="reward_ad_id">ca-app-pub-6109292819672436/5831269341</string>
 </resources>

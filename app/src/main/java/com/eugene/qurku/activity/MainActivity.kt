@@ -3,24 +3,22 @@ package com.eugene.qurku.activity
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import android.net.Network
 import android.net.NetworkCapabilities
-import android.net.NetworkRequest
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eugene.qurku.R
 import com.eugene.qurku.adaper.MainListSurahRecyclerViewAdapter
+import com.eugene.qurku.admob.RewardedAd
 import com.eugene.qurku.databinding.ActivityMainBinding
 import com.eugene.qurku.repository.MainRepository
 import com.eugene.qurku.response.listsurah.ListSurahDataResponse
 import com.eugene.qurku.viewmodel.main.MainViewModel
 import com.eugene.qurku.viewmodel.main.MainViewModelFactory
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.system.exitProcess
 
@@ -28,11 +26,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var dialogNoConnection: MaterialAlertDialogBuilder
+    private lateinit var rewardedAd: RewardedAd
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        MobileAds.initialize(this@MainActivity)
+        rewardedAd = RewardedAd(this@MainActivity, R.string.reward_ad_id)
+
         dialogNoConnection = MaterialAlertDialogBuilder(this@MainActivity)
             .setTitle(resources.getString(R.string.no_connection))
             .setMessage(resources.getString(R.string.no_connection_message))
@@ -55,14 +58,17 @@ class MainActivity : AppCompatActivity() {
             }
 
             viewModel.getAllSurah()
-            viewModel.data.observe(this) {
+            viewModel.data.observe(this) { it ->
                 if (it.isSuccessful) {
 
                     val adapter = MainListSurahRecyclerViewAdapter(this, it.body()?.data!!, object: MainListSurahRecyclerViewAdapter.ItemClickListener{
                         override fun onItemClickListener(position: Int) {
-                            val intent = Intent(this@MainActivity, DetailSurahActivity::class.java)
-                            intent.putExtra(DetailSurahActivity.NUMBER_SURAH, it.body()?.data!![position].nomor)
-                            startActivity(intent)
+                            rewardedAd.loadAd()
+                            rewardedAd.showAd(){
+                                val intent = Intent(this@MainActivity, DetailSurahActivity::class.java)
+                                intent.putExtra(DetailSurahActivity.NUMBER_SURAH, it.body()?.data!![position].nomor)
+                                startActivity(intent)
+                            }
                         }
                     })
 
@@ -93,9 +99,12 @@ class MainActivity : AppCompatActivity() {
 
             val adapter = MainListSurahRecyclerViewAdapter(this, filterData, object: MainListSurahRecyclerViewAdapter.ItemClickListener{
                 override fun onItemClickListener(position: Int) {
-                    val intent = Intent(this@MainActivity, DetailSurahActivity::class.java)
-                    intent.putExtra(DetailSurahActivity.NUMBER_SURAH, filterData[position].nomor)
-                    startActivity(intent)
+                    rewardedAd.loadAd()
+                    rewardedAd.showAd {
+                        val intent = Intent(this@MainActivity, DetailSurahActivity::class.java)
+                        intent.putExtra(DetailSurahActivity.NUMBER_SURAH, filterData[position].nomor)
+                        startActivity(intent)
+                    }
                 }
             })
 
